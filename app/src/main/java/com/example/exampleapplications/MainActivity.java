@@ -2,42 +2,49 @@ package com.example.exampleapplications;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
+    ImageView imageView;
+    EditText editText;
 
-    public class DownloadTask extends AsyncTask<String, Void, String> {
+    public class ImageDownloader extends AsyncTask<URL, Void, Bitmap> {
         @Override
-        protected String doInBackground(String... urls) {
-            String result = "";
-            URL url;
-            HttpURLConnection urlConnection = null;
-
+        protected Bitmap doInBackground(URL... urls) {
             try {
-                url = new URL(urls[0]);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                InputStream in = urlConnection.getInputStream();
-                InputStreamReader reader = new InputStreamReader(in);
-
-                int data = reader.read();
-                while (data != -1) {
-                    char current = (char) data;
-                    result += current;
-                    data = reader.read();
-                }
-
-                return result;
-            } catch (Exception e) {
+                URL url = urls[0];
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+                InputStream in = connection.getInputStream();
+                Bitmap myBitmap = BitmapFactory.decodeStream(in);
+                return myBitmap;
+            } catch (Exception e){
                 e.printStackTrace();
-                return "Failed!";
+                return null;
             }
+        }
+    }
+
+    public void downloadImage(View view) {
+        ImageDownloader task = new ImageDownloader();
+        Bitmap myImage;
+
+        try {
+            URL url = new URL(String.valueOf(editText.getText()));
+            myImage = task.execute(url).get();
+            imageView.setImageBitmap(myImage);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -46,15 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DownloadTask task = new DownloadTask();
-        String result = null;
-
-        try {
-            result = task.execute("https://www.lipsum.com/").get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Log.i("Result", result);
+        imageView = findViewById(R.id.imageView);
+        editText = findViewById(R.id.editUrl);
     }
 }
