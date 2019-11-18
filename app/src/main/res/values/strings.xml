@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ExampleApplications</string>
+    <string name="mic">Mic</string>
 </resources>
