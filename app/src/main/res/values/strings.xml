@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">ExampleApplications</string>
+
+    <string-array name="pet_name">
+        <item>Cat</item>
+        <item>Dog</item>
+        <item>Rat</item>
+        <item>Pegion</item>
+        <item>Rabbit</item>
+        <item>Snake</item>
+        <item>Elephant</item>
+        <item>Cow</item>
+    </string-array>
+
+    <string-array name="desc">
+        <item>Cat is cute.</item>
+        <item>Dog is faithful.</item>
+        <item>Rat eats cheese.</item>
+        <item>Pegion can fly.</item>
+        <item>Rabbit is very cute.</item>
+        <item>Snake is poisonous.</item>
+        <item>Elephant is dependable.</item>
+        <item>Cow is mother.</item>
+    </string-array>
 </resources>
